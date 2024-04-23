@@ -27,7 +27,7 @@ namespace DeliVeggie.Application.Concrete
         {
             ProductListRequest request = new ProductListRequest()
             {
-                offset = offset,
+                Offset = offset,
                 Limit = limit,
             };
             var response = await bus.Rpc.RequestAsync<ProductListRequest, IEnumerable<Product>>(request);
