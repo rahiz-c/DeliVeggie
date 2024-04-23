@@ -1,4 +1,5 @@
 ﻿using DeliVeggie.Application.Abstracts;
+using DeliVeggie.Domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,7 @@ namespace DeliVeggie.API.Controllers
         public IActionResult GetProductList(int id)
         {
             var product = _productService.GetProductById(id);
+            
             return Ok(product);
         }
     }

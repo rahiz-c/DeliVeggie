@@ -36,7 +36,7 @@ namespace Infrastructure.Repository
             return products.Select(p => new Product()
             {
                 Name = p.Name,
-                EntryDate = p.EntryDate,
+                EntryDate = FormatDateWithOrdinal(p.EntryDate),
                 Price = p.Price,
             }).ToList();
         }
@@ -45,10 +45,38 @@ namespace Infrastructure.Repository
             return new Product()
             {
                 Name = product.Name,
-                EntryDate = product.EntryDate,
+                EntryDate = FormatDateWithOrdinal(product.EntryDate),
                 Price = product.Price,
             };
         }
+        private string GetOrdinalSuffix(int day)
+        {
+            switch (day)
+            {
+                case 1:
+                case 21:
+                case 31:
+                    return "st";
+                case 2:
+                case 22:
+                    return "nd";
+                case 3:
+                case 23:
+                    return "rd";
+                default:
+                    return "th";
+            }
+        }
+
+        private string FormatDateWithOrdinal(DateTime date)
+        {
+            string dayWithOrdinal = date.Day + GetOrdinalSuffix(date.Day);
+            string monthName = date.ToString("MMMM");
+            string year = date.Year.ToString();
+
+            return $"{dayWithOrdinal} of {monthName} {year}";
+        }
+
 
 
         #endregion

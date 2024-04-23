@@ -21,9 +21,9 @@ namespace DeliVeggie.Application.Concrete
         {
             return new Product()
             {
-                Id = 1,
+                Id = "7777",
                 Name = "Biriyani",
-                EntryDate = DateTime.Now,
+                EntryDate = "2022",
                 Price = 100
             };
         }
