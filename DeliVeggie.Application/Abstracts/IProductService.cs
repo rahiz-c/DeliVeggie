@@ -9,8 +9,8 @@ namespace DeliVeggie.Application.Abstracts
 {
     public interface IProductService
     {
-        IEnumerable<Product> GetProducts();
+        Task<IEnumerable<Product>> GetProducts(int offset, int limit);
 
-        Product GetProductById(int id);
+        Task<Product> GetProductById(string id);
     }
 }

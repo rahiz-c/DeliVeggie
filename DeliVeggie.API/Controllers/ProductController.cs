@@ -17,14 +17,14 @@ namespace DeliVeggie.API.Controllers
         }
 
         [HttpGet("list")]
-        public IActionResult GetProductList()
+        public IActionResult GetProductList(int offset, int limit)
         {
-            var list = _productService.GetProducts();
+            var list = _productService.GetProducts(offset, limit);
             return Ok(list);
         }
 
-        [HttpGet("details/{id:int}")]
-        public IActionResult GetProductList(int id)
+        [HttpGet("details/{id}")]
+        public IActionResult GetProductList(string id)
         {
             var product = _productService.GetProductById(id);
             

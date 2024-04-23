@@ -17,20 +17,14 @@ namespace DeliVeggie.Application.Concrete
             _rabbitmqService = rabbitmqService;
         }
 
-        public Product GetProductById(int id)
+        public async Task<Product> GetProductById(string id)
         {
-            return new Product()
-            {
-                Id = "7777",
-                Name = "Biriyani",
-                EntryDate = "2022",
-                Price = 100
-            };
+            return await _rabbitmqService.GetProductById(id);
         }
 
-        public IEnumerable<Product> GetProducts()
+        public async Task<IEnumerable<Product>> GetProducts(int offset, int limit)
         {
-            return _rabbitmqService.GetProducts().Result;
+            return await _rabbitmqService.GetProducts(offset, limit);
         }
     }
 }

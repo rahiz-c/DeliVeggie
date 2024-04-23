@@ -11,8 +11,8 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
 
-  getItems(){
-    return  this.http.get('https://localhost:7213/api/product/list');
+  getItems(offset:number, limit:number):Observable<IProduct[]>{
+    return  this.http.get<IProduct[]>(`https://localhost:7213/api/product/list?offset=${offset}&limit=${limit}`);
   }
 
   getItemById(id:string):Observable<IProduct>{
