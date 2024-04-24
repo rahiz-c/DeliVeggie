@@ -3,10 +3,11 @@ using Infrastructure.MDO;
 using DeliVeggie.Domain;
 using MongoDB.Driver;
 using DataAccess.MDO;
+using DeliVeggie.Application.Abstracts;
 
 namespace Infrastructure.Repository
 {
-    public class PriceReductionMdoRepository: MongoDbRepository<PriceReductionsMDO, PriceReduction, string>
+    public class PriceReductionMdoRepository: MongoDbRepository<PriceReductionsMDO, PriceReduction, string>, IPriceReductionDocumentRepository
     {
         public double GetPriceReductionByDayOfWeek(int dayOfWeek)
         {

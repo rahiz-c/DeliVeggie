@@ -3,6 +3,7 @@ using EasyNetQ;
 using DeliVeggie.Domain;
 using Infrastructure.Repository;
 using Infrastructure.MDO;
+using DeliVeggie.Application.Abstracts;
 internal class Program
 {
     private static async Task Main(string[] args)
@@ -16,16 +17,16 @@ internal class Program
 
     private static Product GetProductById(string productId)
     {
-        ProductMdoRepository productMdoRepository = new ProductMdoRepository();
-        var response = productMdoRepository.GetProductsById(productId);
+        IProductDocumentRepository productMdoRepository = new ProductMdoRepository();
+        var response =  productMdoRepository.GetProductById(productId);
         return response;
     }
 
     private static IEnumerable<Product> GetProducts(int offset, int limit)
     {
-        ProductMdoRepository productMdoRepository = new ProductMdoRepository();
+        IProductDocumentRepository productMdoRepository = new ProductMdoRepository();
 
-        var response =  productMdoRepository.GetProducts(offset, limit);
+        var response =   productMdoRepository.GetProducts(offset, limit);
 
         foreach (var item in response)
         {
@@ -38,7 +39,7 @@ internal class Program
     private static double GetReducedPrice(double price)
     {
         int dayOfWeek = ((int)DateTime.Now.DayOfWeek) + 1;
-        PriceReductionMdoRepository priceReductionMdoRepository = new PriceReductionMdoRepository();
+        IPriceReductionDocumentRepository priceReductionMdoRepository = new PriceReductionMdoRepository();
         double reduction = priceReductionMdoRepository.GetPriceReductionByDayOfWeek(dayOfWeek);
         return price - reduction;
     }

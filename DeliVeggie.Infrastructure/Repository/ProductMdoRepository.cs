@@ -2,12 +2,14 @@
 using Infrastructure.MDO;
 using DeliVeggie.Domain;
 using MongoDB.Driver;
+using DeliVeggie.Application.Abstracts;
 
 namespace Infrastructure.Repository
 {
-    public class ProductMdoRepository : MongoDbRepository<ProductMdo, Product, string>
+    public class ProductMdoRepository : MongoDbRepository<ProductMdo, Product, string>, IProductDocumentRepository
     {
-        public IList<Product> GetProducts(int offset, int limit)
+                       
+        IEnumerable<Product> IProductDocumentRepository.GetProducts(int offset, int limit)
         {
             FilterDefinitionBuilder<ProductMdo> filterBuilder = Builders<ProductMdo>.Filter;
             FilterDefinition<ProductMdo> filterDefinition = filterBuilder.Empty;
@@ -17,21 +19,19 @@ namespace Infrastructure.Repository
                                      .Limit(limit)
                                      .ToList();
             return ToDomain(products);
-
         }
 
-        public Product GetProductsById(string productId)
+        Product IProductDocumentRepository.GetProductById(string id)
         {
             FilterDefinitionBuilder<ProductMdo> filterBuilder = Builders<ProductMdo>.Filter;
-            FilterDefinition<ProductMdo> filterDefinition = filterBuilder.Eq(x=> x.Id, productId);
+            FilterDefinition<ProductMdo> filterDefinition = filterBuilder.Eq(x => x.Id, id);
 
-            var product = collection.Find(filterDefinition).FirstOrDefault();                                     
+            var product = collection.Find(filterDefinition).FirstOrDefault();
             return ToDomain(product);
-
         }
 
         #region PRIVATE METHODS
-        private IList<Product> ToDomain(IEnumerable<ProductMdo> products)
+        private IEnumerable<Product> ToDomain(IList<ProductMdo> products)
         {
             return products.Select(p => new Product()
             {
@@ -77,6 +77,7 @@ namespace Infrastructure.Repository
             return $"{dayWithOrdinal} of {monthName} {year}";
         }
 
+        
 
 
         #endregion
