@@ -52,8 +52,8 @@ namespace DeliVeggie.UI.Extensions
         {
             if (_staticFilesLoaded) { return; }
 
-            _jsFiles = Directory.GetFiles(Wwwroot, "*.js", SearchOption.AllDirectories).Select(s => "chief2022" + s.Substring(Wwwroot.Length).Replace("\\", "/", StringComparison.InvariantCulture));
-            _cssFiles = Directory.GetFiles(Wwwroot, "*.css", SearchOption.AllDirectories).Select(s => "chief2022" + s.Substring(Wwwroot.Length).Replace("\\", "/", StringComparison.InvariantCulture));
+            _jsFiles = Directory.GetFiles(Wwwroot, "*.js", SearchOption.AllDirectories).Select(s => s.Substring(Wwwroot.Length).Replace("\\", "/", StringComparison.InvariantCulture));
+            _cssFiles = Directory.GetFiles(Wwwroot, "*.css", SearchOption.AllDirectories).Select(s =>  s.Substring(Wwwroot.Length).Replace("\\", "/", StringComparison.InvariantCulture));
             _staticFilesLoaded = true;
         }
     }
