@@ -1,17 +1,29 @@
 ﻿
-using EasyNetQ;
-using DeliVeggie.Domain;
-using Infrastructure.Repository;
-using Infrastructure.MDO;
 using DeliVeggie.Application.Abstracts;
+using DeliVeggie.Domain;
+using EasyNetQ;
+using Infrastructure.Repository;
+using RabbitMQ.Client.Exceptions;
 internal class Program
 {
     private static async Task Main(string[] args)
     {
-        var bus = RabbitHutch.CreateBus("host=localhost:15672");
-        await bus.Rpc.RespondAsync<ProductListRequest, IEnumerable<Product>>(request => GetProducts(request.Offset, request.Limit));
+        try
+        {
+            var bus = RabbitHutch.CreateBus("host=localhost;port=15672;username=guest;password=guest;requestedHeartbeat=10");
+            await bus.Rpc.RespondAsync<ProductListRequest, IEnumerable<Product>>(request => GetProducts(request.Offset, request.Limit));
 
-        await bus.Rpc.RespondAsync<ProductByIdRequest, Product>(request=>GetProductById(request.ProductId));
+            await bus.Rpc.RespondAsync<ProductByIdRequest, Product>(request => GetProductById(request.ProductId));
+        }
+        catch(BrokerUnreachableException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+        
     }
 
 
