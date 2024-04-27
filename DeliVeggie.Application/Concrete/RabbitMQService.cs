@@ -14,25 +14,38 @@ namespace DeliVeggie.Application.Concrete
         private readonly IBus bus;
         public RabbitMQService()
         {
-             bus = RabbitHutch.CreateBus("host=localhost:15672");
+             bus = RabbitHutch.CreateBus("host=localhost", register=>register.EnableConsoleLogger());
         }
         public async Task<Product> GetProductById(string id)
         {
-            ProductByIdRequest request = new ProductByIdRequest() { ProductId = id};
-            var product = await bus.Rpc.RequestAsync<ProductByIdRequest, Product>(request);
-            return product;
-        }
-
-        public async Task<IEnumerable<Product>> GetProducts(int offset, int limit)
-        {
-            ProductListRequest request = new ProductListRequest()
+            try
             {
-                Offset = offset,
-                Limit = limit,
-            };
-            var response = await bus.Rpc.RequestAsync<ProductListRequest, IEnumerable<Product>>(request);
-
-            return response;
+                ProductByIdRequest request = new ProductByIdRequest(id);
+                var product = await bus.Rpc.RequestAsync<ProductByIdRequest, Product>(request);
+                return product;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+            
         }
+
+        public async Task<IEnumerable<Product>> GetProducts(int offset, int limit = 10)
+        {
+            ProductListRequest request = new ProductListRequest(offset, limit);
+            
+            try
+            {
+                var products = await bus.Rpc.RequestAsync<ProductListRequest, IEnumerable<Product>>(request);
+                return products;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return null;
+            }
+        }       
     }
 }
